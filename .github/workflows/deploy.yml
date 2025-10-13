@@ -1,57 +1,96 @@
-name: Flask CI/CD Pipeline
+name: CI/CD Pipeline for Flask App
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  test:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      # -----------------------
+      # Step 1: Checkout code
+      # -----------------------
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      # -----------------------
+      # Step 2: Set up Python
+      # -----------------------
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: '3.10'
 
+      # -----------------------
+      # Step 3: Cache dependencies
+      # -----------------------
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      # -----------------------
+      # Step 4: Install dependencies
+      # -----------------------
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest
 
+      # -----------------------
+      # Step 5: Run unit tests
+      # -----------------------
       - name: Run tests
         run: pytest
 
-  build_and_deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
+      # -----------------------
+      # Step 6: Log in to Docker Hub
+      # -----------------------
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      # -----------------------
+      # Step 7: Build Docker image
+      # -----------------------
+      - name: Build Docker image
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/flask-ci-cd:latest .
+
+      # -----------------------
+      # Step 8: Push Docker image
+      # -----------------------
+      - name: Push Docker image to Docker Hub
+        run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/flask-ci-cd:latest
 
+      # -----------------------
+      # Step 9: Deploy to AWS EC2
+      # -----------------------
       - name: Deploy to AWS EC2
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.AWS_EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.AWS_PRIVATE_KEY }}
-          script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/flask-ci-cd:latest
-            docker stop flaskapp || true
-            docker rm flaskapp || true
-            docker run -d -p 80:5000 --name flaskapp ${{ secrets.DOCKERHUB_USERNAME }}/flask-ci-cd:latest
+        env:
+          HOST: ${{ secrets.AWS_EC2_HOST }}
+          KEY: ${{ secrets.AWS_PRIVATE_KEY }}
+          USER: ubuntu
+          IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/flask-ci-cd:latest
+        run: |
+          echo "$KEY" > private_key.pem
+          chmod 600 private_key.pem
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST "
+            sudo docker pull $IMAGE &&
+            sudo docker stop flask-ci-cd || true &&
+            sudo docker rm flask-ci-cd || true &&
+            sudo docker run -d -p 80:5000 --name flask-ci-cd $IMAGE
+          "
