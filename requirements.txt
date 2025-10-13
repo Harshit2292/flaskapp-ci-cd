@@ -1,6 +1,4 @@
-click==7.0                # via flask
-flask==1.1.1              # via flaskr (setup.py)
-itsdangerous==1.1.0       # via flask
-jinja2==2.11.1            # via flask
-markupsafe==1.1.1         # via jinja2
-werkzeug==1.0.0           # via flask
+Flask==2.0.1
+Flask-MySQLdb==0.2.0
+requests==2.26.0
+Werkzeug==2.2.2
